@@ -1,5 +1,23 @@
 var Chain = (function () {
 
+  function getProbabilityFromTo(from, to, steps) {
+    var permutationSteps = steps - 2, //first and last don't count
+      choices = Object.keys(this.chart),
+      permutations = this.getPermutationsWithLength(choices, permutationSteps),
+      sum;
+
+    if (permutations.length === 0) {
+      sum = this.getProbabilityOf.apply(this, [from, to]);
+    } else {
+      sum = 0;
+      for(var i = 0; i < permutations.length; i++) {
+        sum += this.getProbabilityOf.apply(this, [from].concat(permutations[i]).concat([to]));
+      }
+    }
+
+    return sum;
+  }
+
   function getProbabilityOf() {
     var i,
       chart = this.chart,
@@ -17,7 +35,7 @@ var Chain = (function () {
     return result;
   }
 
-  function getCombinationsByCounting() {
+  function getPermutationsByCounting() {
     var i, j, q,
       args = Array.prototype.slice.apply(arguments),
       length = Math.pow(args.length, args.length),
@@ -33,10 +51,14 @@ var Chain = (function () {
     return result;
   }
 
-  function getCombinationsByConcatenation() {
+  function getPermutationsByConcatenationWithLength(list, length) {
+    if (length < 1) {
+      return [];
+    }
+
     var i, current,
-      args = Array.prototype.slice.apply(arguments),
-      argsLength = args.length,
+      args = Array.prototype.slice.apply(list),
+      resultLength = Math.min(args.length, length),
       q = [],
       result = [];
 
@@ -46,7 +68,7 @@ var Chain = (function () {
 
     while(q.length) {
       current = q.shift();
-      if (current.length < args.length) {
+      if (current.length < resultLength) {
         for(i = 0; i < args.length; i++ ) {
           q.push(current.concat([args[i]]));
         }
@@ -55,20 +77,23 @@ var Chain = (function () {
       }
     }
 
-    console.log(result.length);
-
     return result;
+  }
+
+  function getPermutationsByConcatenation() {
+    return getPermutationsByConcatenationWithLength(arguments, arguments.length);
   }
 
   var constructor = function (chart) {
     this.chart = chart;
   };
   constructor.prototype = {
-
-    getCombinationsByCounting: getCombinationsByCounting,
-    getCombinationsByConcatenation: getCombinationsByConcatenation,
-    getCombinations: getCombinationsByConcatenation,
-    getProbabilityOf: getProbabilityOf
+    getPermutationsByCounting: getPermutationsByCounting,
+    getPermutationsByConcatenation: getPermutationsByConcatenation,
+    getPermutations: getPermutationsByConcatenation,
+    getPermutationsWithLength: getPermutationsByConcatenationWithLength,
+    getProbabilityOf: getProbabilityOf,
+    getProbabilityFromTo: getProbabilityFromTo
   };
   return constructor;
 })();
