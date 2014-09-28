@@ -41,9 +41,9 @@ chain.getProbabilityOf('a', 'b', 'a'); //0.065  6.5%
 chain.getProbabilityOf('a', 'b', 'c', 'a'); //0.0455  4.55%
 
 //start to end, number of steps known
-// This is fun, because we're walking through each possibility between start to end, which moves toward an isotope.
-// The isotope forms because we're adding all the possible paths between start and end, assuming we can move between
-// all of them in-between.
+// This is fun, because we're walking through each possibility between start to end, which moves 
+// toward an isotope. The isotope forms because we're adding all the possible paths between start 
+// and end, assuming we can move between all of them in-between.
 
 chain.getProbabilityFromTo('c', 'a', 1); //0.7
 chain.getProbabilityFromTo('c', 'a', 2); //0.19999999999999998  20%
@@ -81,28 +81,30 @@ var threeTimePeriodsLater = {
 };
 
 var chain = new Chain(transition),
-    timePeriods = 3;
+    periods = 3;
 
 //calculate!
 var result = {
     'bull market': {
-      'bull market': chain.getProbabilityFromTo('bull market', 'bull market', timePeriods),
-      'bear market': chain.getProbabilityFromTo('bull market', 'bear market', timePeriods),
-      'stagnant market': chain.getProbabilityFromTo('bull market', 'stagnant market', timePeriods)
+      'bull market': chain.getProbabilityFromTo('bull market', 'bull market', periods),
+      'bear market': chain.getProbabilityFromTo('bull market', 'bear market', periods),
+      'stagnant market': chain.getProbabilityFromTo('bull market', 'stagnant market', periods)
     },
     'bear market': {
-      'bull market': chain.getProbabilityFromTo('bear market', 'bull market', timePeriods),
-      'bear market': chain.getProbabilityFromTo('bear market', 'bear market', timePeriods),
-      'stagnant market': chain.getProbabilityFromTo('bear market', 'stagnant market', timePeriods)
+      'bull market': chain.getProbabilityFromTo('bear market', 'bull market', periods),
+      'bear market': chain.getProbabilityFromTo('bear market', 'bear market', periods),
+      'stagnant market': chain.getProbabilityFromTo('bear market', 'stagnant market', periods)
     },
     'stagnant market': {
-      'bull market': chain.getProbabilityFromTo('stagnant market', 'bull market', timePeriods),
-      'bear market': chain.getProbabilityFromTo('stagnant market', 'bear market', timePeriods),
-      'stagnant market': chain.getProbabilityFromTo('stagnant market', 'stagnant market', timePeriods)
+      'bull market': chain.getProbabilityFromTo('stagnant market', 'bull market', periods),
+      'bear market': chain.getProbabilityFromTo('stagnant market', 'bear market', periods),
+      'stagnant market': chain.getProbabilityFromTo('stagnant market', 'stagnant market', periods)
     }
 };
 
-expect(Chain.chartEqualWithin(result, threeTimePeriodsLater, 5)).to.be.true;  //it's true.
+//the expected result and our result are equal
+// their expected result is rounded to 5 decimal places, so we have to round as well
+expect(Chain.chartEqualWithin(result, threeTimePeriodsLater, 5)).to.be.true; 
   
 ```
 
