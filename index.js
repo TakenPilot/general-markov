@@ -1,7 +1,17 @@
+/**
+ * @class
+ */
 var Chain = (function () {
+  "use strict";
 
   //instance
 
+  /**
+   * @param from
+   * @param to
+   * @param steps
+   * @returns {number}
+   */
   function getProbabilityFromTo(from, to, steps) {
     var permutationSteps = steps - 1, //first step doesn't count
       choices = Object.keys(this.chart),
@@ -21,6 +31,9 @@ var Chain = (function () {
     return sum;
   }
 
+  /**
+   * @returns {number}
+   */
   function getProbabilityOf() {
     var i,
       chart = this.chart,
@@ -38,6 +51,9 @@ var Chain = (function () {
     return result;
   }
 
+  /**
+   * @returns {Array}
+   */
   function getPermutationsByCounting() {
     var i, j, q,
       args = Array.prototype.slice.apply(arguments),
@@ -54,6 +70,11 @@ var Chain = (function () {
     return result;
   }
 
+  /**
+   * @param list
+   * @param length
+   * @returns {Array}
+   */
   function getPermutationsByConcatenationWithLength(list, length) {
     if (length < 1) {
       return [];
@@ -84,10 +105,17 @@ var Chain = (function () {
     return result;
   }
 
+  /**
+   * @returns {Array}
+   */
   function getPermutationsByConcatenation() {
     return getPermutationsByConcatenationWithLength(arguments, arguments.length);
   }
 
+  /**
+   * @param rowName
+   * @returns {boolean}
+   */
   function isRowNormalized(rowName) {
     var sum = 0,
       row = this.chart[rowName],
@@ -99,6 +127,10 @@ var Chain = (function () {
     return sum === 1;
   }
 
+  /**
+   * @param columnName
+   * @returns {number}
+   */
   function getColumnSum(columnName) {
     var row, sum = 0,
       keys = Object.keys(this.chart);
@@ -110,12 +142,20 @@ var Chain = (function () {
     return sum;
   }
 
+  /**
+   * @param columnName
+   * @returns {number}
+   */
   function getColumnAverage(columnName) {
     return this.getColumnSum(columnName) / Object.keys(this.chart).length;
   }
 
   //static
 
+  /**
+   * @param list
+   * @returns {number}
+   */
   function getSum(list) {
     var result = 0;
     for(var i = 0; i < list.length; i++) {
@@ -124,10 +164,18 @@ var Chain = (function () {
     return result;
   }
 
+  /**
+   * @param list
+   * @returns {number}
+   */
   function getAverage(list) {
     return getSum(list) / list.length;
   }
 
+  /**
+   * @param list
+   * @returns {Array}
+   */
   function normalize(list) {
     var sum = getSum(list);
     for(var i = 0; i < list.length; i++) {
@@ -136,11 +184,23 @@ var Chain = (function () {
     return list;
   }
 
+  /**
+   * @param a
+   * @param b
+   * @param decimalPlaces
+   * @returns {boolean}
+   */
   function equalWithin(a, b, decimalPlaces) {
     var digits = decimalPlaces * 10;
     return Math.round(a*digits) === Math.round(b*digits);
   }
 
+  /**
+   * @param a
+   * @param b
+   * @param decimalPlaces
+   * @returns {boolean}
+   */
   function chartEqualWithin(a, b, decimalPlaces) {
     var rowKeys = Object.keys(a);
     for(var i = 0; i < rowKeys.length; i++) {
@@ -153,6 +213,10 @@ var Chain = (function () {
     return true;
   }
 
+  /**
+   * @constructs
+   * @param chart
+   */
   var constructor = function (chart) {
     this.chart = chart;
   };
