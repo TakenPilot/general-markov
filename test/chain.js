@@ -1,5 +1,6 @@
 var expect = require('chai').expect,
-  Chain = require('../.');
+  Chain = require('../.').Chain,
+  Matrix = require('../.').Matrix;
 
 describe('basic math', function () {
   var chart = {
@@ -31,18 +32,6 @@ describe('basic math', function () {
       chain.getColumnAverage('b') +
       chain.getColumnAverage('c')
     ).to.be.within(0.99999999, 1.000000001);
-  });
-
-  it('normalize is correct with small numbers', function () {
-    expect(Chain.getAverage([1, 2, 3, 4, 5])).to.equal(3);
-  });
-
-  it('normalize is correct with small numbers', function () {
-    expect(Chain.getSum(Chain.normalize([1, 2, 3, 4, 5]))).to.equal(1);
-  });
-
-  it('normalize is correct with large numbers', function () {
-    expect(Chain.getSum(Chain.normalize([5000, 2, 111111, 3000, 1121212]))).to.equal(1);
   });
 });
 

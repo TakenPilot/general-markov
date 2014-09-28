@@ -1,16 +1,26 @@
-Chain
+General Markov
 -----
 
 Helper library to perform operations on Observable Markov Models (OMMs).  Markov chains are really useful.
 
-[![Build Status](https://travis-ci.org/TakenPilot/chain.svg?branch=master)](https://travis-ci.org/TakenPilot/chain)
+Can be used from node or the browser.
 
-[![Code Climate](https://codeclimate.com/github/TakenPilot/chain/badges/gpa.svg)](https://codeclimate.com/github/TakenPilot/chain)
+[![Build Status](https://travis-ci.org/TakenPilot/general-markov.svg?branch=master)](https://travis-ci.org/TakenPilot/general-markov)
 
-[![Coverage Status](https://coveralls.io/repos/TakenPilot/chain/badge.png?branch=master)](https://coveralls.io/r/TakenPilot/chain?branch=master)
+[![Code Climate](https://codeclimate.com/github/TakenPilot/general-markov/badges/gpa.svg)](https://codeclimate.com/github/TakenPilot/general-markov)
 
-[![Dependencies](https://david-dm.org/TakenPilot/chain.svg?style=flat)](https://david-dm.org/TakenPilot/chain.svg?style=flat)
+[![Coverage Status](https://coveralls.io/repos/TakenPilot/general-markov/badge.png?branch=master)](https://coveralls.io/r/TakenPilot/general-markov?branch=master)
 
+[![Dependencies](https://david-dm.org/TakenPilot/general-markov.svg?style=flat)](https://david-dm.org/TakenPilot/general-markov.svg?style=flat)
+
+Editorial:  I actually use this library for some projects, so there are touches that make it more practical than most.  
+For example, charts have names for the columns because the order really doesn't matter.  Names are also useful to link up 
+to other math models or to real events.  It much more practical to link the click event to a column actually named 
+'click' rather than row and column 7.  I could have used a look up table, but then I'm wrapping my math in more math.
+
+Warning:  I haven't got the speed requirements up to where they should be yet.  Using these for AI is only useful for
+time steps up to 10.  If you're doing more than that, you should probably be trying to calculate the limit/isotope of a
+particular outcome instead.  I talk more about that in the examples below.
 
 ##Example
 
