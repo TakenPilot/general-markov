@@ -13,6 +13,8 @@ Can be used from node or the browser.
 
 [![Dependencies](https://david-dm.org/TakenPilot/general-markov.svg?style=flat)](https://david-dm.org/TakenPilot/general-markov.svg?style=flat)
 
+[![NPM version](https://badge.fury.io/js/general-markov.svg)](http://badge.fury.io/js/general-markov)
+
 Editorial:  I actually use this library for some projects, so there are touches that make it more practical than most. For 
 example, charts have names for the columns because the order really doesn't matter.  Names are also useful to link up 
 to other math models or to real events.  It much more practical to link the click event to a column actually named 'click' 
