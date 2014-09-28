@@ -1,16 +1,31 @@
 {
   "name": "chain",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "",
   "main": "index.js",
+  "keywords": [
+    "markov",
+    "chain",
+    "math",
+    "probability"
+  ],
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "./node_modules/.bin/mocha -r blanket -R mocha-lcov-reporter | ./node_modules/coveralls/bin/coveralls.js"
   },
-  "author": "",
+  "config": {
+    "blanket": {
+      "pattern": "adapter.js",
+      "data-cover-never": "node_modules"
+    }
+  },
+  "author": "Dane Stuckel",
   "license": "ISC",
   "devDependencies": {
+    "blanket": "^1.1.6",
     "chai": "^1.9.1",
-    "mocha": "^1.21.4"
+    "coveralls": "^2.11.2",
+    "mocha": "^1.21.4",
+    "mocha-lcov-reporter": "0.0.1"
   },
   "dependencies": {
     "lodash": "^2.4.1"

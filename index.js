@@ -1,7 +1,7 @@
 var Chain = (function () {
 
   function getProbabilityFromTo(from, to, steps) {
-    var permutationSteps = steps - 2, //first and last don't count
+    var permutationSteps = steps - 1, //first step doesn't count
       choices = Object.keys(this.chart),
       permutations = this.getPermutationsWithLength(choices, permutationSteps),
       sum;
@@ -11,7 +11,8 @@ var Chain = (function () {
     } else {
       sum = 0;
       for(var i = 0; i < permutations.length; i++) {
-        sum += this.getProbabilityOf.apply(this, [from].concat(permutations[i]).concat([to]));
+        var permutation = [from].concat(permutations[i]).concat([to]);
+        sum += this.getProbabilityOf.apply(this, permutation);
       }
     }
 

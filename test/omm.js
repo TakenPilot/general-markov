@@ -42,11 +42,11 @@ describe('getProbabilityFromTo', function () {
   var chain;
 
   it('example 1', function () {
-    expect(chain.getProbabilityFromTo('c', 'a', 2)).to.equal(chart.c.a);
+    expect(chain.getProbabilityFromTo('c', 'a', 1)).to.equal(chart.c.a);
   });
 
   it('example 2', function () {
-    expect(chain.getProbabilityFromTo('c', 'a', 3)).to.equal(
+    expect(chain.getProbabilityFromTo('c', 'a', 2)).to.equal(
       chart.c.a*chart.a.a +
       chart.c.b*chart.b.a +
       chart.c.c*chart.c.a
