@@ -13,10 +13,10 @@ Can be used from node or the browser.
 
 [![Dependencies](https://david-dm.org/TakenPilot/general-markov.svg?style=flat)](https://david-dm.org/TakenPilot/general-markov.svg?style=flat)
 
-Editorial:  I actually use this library for some projects, so there are touches that make it more practical than most.  
-For example, charts have names for the columns because the order really doesn't matter.  Names are also useful to link up 
-to other math models or to real events.  It much more practical to link the click event to a column actually named 
-'click' rather than row and column 7.  I could have used a look up table, but then I'm wrapping my math in more math.
+Editorial:  I actually use this library for some projects, so there are touches that make it more practical than most. For 
+example, charts have names for the columns because the order really doesn't matter.  Names are also useful to link up 
+to other math models or to real events.  It much more practical to link the click event to a column actually named 'click' 
+rather than row and column 7. I could have used a look up table, but then I'm wrapping my math in more math.
 
 Warning:  I haven't got the speed requirements up to where they should be yet.  Using these for AI is only useful for
 time steps up to 10.  If you're doing more than that, you should probably be trying to calculate the limit/isotope of a
@@ -27,9 +27,9 @@ particular outcome instead.  I talk more about that in the examples below.
 ```JavaScript
 
 var chart = {
-    'a': {'a': 0.2, 'b': 0.65, 'c': 0.15},
-    'b': {'a': 0.1, 'b': 0.8, 'c': 0.1},
-    'c': {'a': 0.7, 'b': 0.25, 'c': 0.05}
+  'a': {'a': 0.2, 'b': 0.65, 'c': 0.15},
+  'b': {'a': 0.1, 'b': 0.8, 'c': 0.1},
+  'c': {'a': 0.7, 'b': 0.25, 'c': 0.05}
 };
 
 chain = new Chain(chart);
@@ -40,10 +40,15 @@ chain.getProbabilityOf('a', 'b');  //0.65  65%
 chain.getProbabilityOf('a', 'b', 'a'); //0.065  6.5%
 chain.getProbabilityOf('a', 'b', 'c', 'a'); //0.0455  4.55%
 
-//start to end, number of steps known
-// This is fun, because we're walking through each possibility between start to end, which moves 
-// toward an isotope. The isotope forms because we're adding all the possible paths between start 
-// and end, assuming we can move between all of them in-between.
+```
+
+##From start to end in exact number of steps
+
+This is fun, because we're walking through each possibility between start to end, which moves 
+toward an isotope. The isotope forms because we're adding all the possible paths between start 
+and end, assuming we can move between all of them in-between.
+
+```JavaScript
 
 chain.getProbabilityFromTo('c', 'a', 1); //0.7
 chain.getProbabilityFromTo('c', 'a', 2); //0.19999999999999998  20%
@@ -68,38 +73,44 @@ chain.getProbabilityFromTo('a', 'b', 7); //0.7146687500000002  71.5%
 
 // with a transition matrix like this:
 var transition = {
-    'bull market': {'bull market': 0.9, 'bear market': 0.075, 'stagnant market': 0.025},
-    'bear market': {'bull market': 0.15, 'bear market': 0.8, 'stagnant market': 0.05},
-    'stagnant market': {'bull market': 0.25, 'bear market': 0.25, 'stagnant market': 0.5}
+  'bull market': 
+    {'bull market': 0.9, 'bear market': 0.075, 'stagnant market': 0.025},
+  'bear market': 
+    {'bull market': 0.15, 'bear market': 0.8, 'stagnant market': 0.05},
+  'stagnant market': 
+    {'bull market': 0.25, 'bear market': 0.25, 'stagnant market': 0.5}
 };
 
 // then three time periods later, we should get this:
 var threeTimePeriodsLater = {
-    'bull market': {'bull market': 0.7745, 'bear market': 0.17875, 'stagnant market': 0.04675},
-    'bear market': {'bull market': 0.3575, 'bear market': 0.56825, 'stagnant market': 0.07425},
-    'stagnant market': {'bull market': 0.4675, 'bear market': 0.37125, 'stagnant market': 0.16125}
+  'bull market': 
+    {'bull market': 0.7745, 'bear market': 0.17875, 'stagnant market': 0.04675},
+  'bear market': 
+    {'bull market': 0.3575, 'bear market': 0.56825, 'stagnant market': 0.07425},
+  'stagnant market': 
+    {'bull market': 0.4675, 'bear market': 0.37125, 'stagnant market': 0.16125}
 };
 
 var chain = new Chain(transition),
-    periods = 3;
+    ticks = 3;
 
 //calculate!
 var result = {
-    'bull market': {
-      'bull market': chain.getProbabilityFromTo('bull market', 'bull market', periods),
-      'bear market': chain.getProbabilityFromTo('bull market', 'bear market', periods),
-      'stagnant market': chain.getProbabilityFromTo('bull market', 'stagnant market', periods)
-    },
-    'bear market': {
-      'bull market': chain.getProbabilityFromTo('bear market', 'bull market', periods),
-      'bear market': chain.getProbabilityFromTo('bear market', 'bear market', periods),
-      'stagnant market': chain.getProbabilityFromTo('bear market', 'stagnant market', periods)
-    },
-    'stagnant market': {
-      'bull market': chain.getProbabilityFromTo('stagnant market', 'bull market', periods),
-      'bear market': chain.getProbabilityFromTo('stagnant market', 'bear market', periods),
-      'stagnant market': chain.getProbabilityFromTo('stagnant market', 'stagnant market', periods)
-    }
+  'bull market': {
+    'bull market': chain.getProbabilityFromTo('bull market', 'bull market', ticks),
+    'bear market': chain.getProbabilityFromTo('bull market', 'bear market', ticks),
+    'stagnant market': chain.getProbabilityFromTo('bull market', 'stagnant market', ticks)
+  },
+  'bear market': {
+    'bull market': chain.getProbabilityFromTo('bear market', 'bull market', ticks),
+    'bear market': chain.getProbabilityFromTo('bear market', 'bear market', ticks),
+    'stagnant market': chain.getProbabilityFromTo('bear market', 'stagnant market', ticks)
+  },
+  'stagnant market': {
+    'bull market': chain.getProbabilityFromTo('stagnant market', 'bull market', ticks),
+    'bear market': chain.getProbabilityFromTo('stagnant market', 'bear market', ticks),
+    'stagnant market': chain.getProbabilityFromTo('stagnant market', 'stagnant market', ticks)
+  }
 };
 
 //the expected result and our result are equal
@@ -111,3 +122,5 @@ expect(Chain.chartEqualWithin(result, threeTimePeriodsLater, 5)).to.be.true;
 ##To DO
 
 * Add support for Hidden Markov Models
+* Add support for ANOVAs to look for better data to use as columns
+* Add support for more matrix math
