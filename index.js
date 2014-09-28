@@ -1,5 +1,7 @@
 var Chain = (function () {
 
+  //instance
+
   function getProbabilityFromTo(from, to, steps) {
     var permutationSteps = steps - 1, //first step doesn't count
       choices = Object.keys(this.chart),
@@ -85,17 +87,73 @@ var Chain = (function () {
     return getPermutationsByConcatenationWithLength(arguments, arguments.length);
   }
 
+  function isRowNormalized(rowName) {
+    var sum = 0,
+      row = this.chart[rowName],
+      keys = Object.keys(row);
+    for(var i = 0; i < keys.length; i++) {
+      sum += row[keys[i]];
+    }
+
+    return sum === 1;
+  }
+
+  function getColumnSum(columnName) {
+    var row, sum = 0,
+      keys = Object.keys(this.chart);
+    for(var i = 0; i < keys.length; i++) {
+      row = this.chart[keys[i]];
+      sum += row[columnName];
+    }
+
+    return sum;
+  }
+
+  function getColumnAverage(columnName) {
+    return this.getColumnSum(columnName) / Object.keys(this.chart).length;
+  }
+
+  //static
+
+  function getSum(list) {
+    var result = 0;
+    for(var i = 0; i < list.length; i++) {
+      result += list[i];
+    }
+    return result;
+  }
+
+  function getAverage(list) {
+    return getSum(list) / list.length;
+  }
+
+  function normalize(list) {
+    var sum = getSum(list);
+    for(var i = 0; i < list.length; i++) {
+      list[i] = list[i] / sum;
+    }
+    return list;
+  }
+
   var constructor = function (chart) {
     this.chart = chart;
   };
+  //instance methods
   constructor.prototype = {
     getPermutationsByCounting: getPermutationsByCounting,
     getPermutationsByConcatenation: getPermutationsByConcatenation,
     getPermutations: getPermutationsByConcatenation,
     getPermutationsWithLength: getPermutationsByConcatenationWithLength,
     getProbabilityOf: getProbabilityOf,
-    getProbabilityFromTo: getProbabilityFromTo
+    getProbabilityFromTo: getProbabilityFromTo,
+    isRowNormalized: isRowNormalized,
+    getColumnSum: getColumnSum,
+    getColumnAverage: getColumnAverage
   };
+  //static methods
+  constructor.getAverage = getAverage;
+  constructor.getSum = getSum;
+  constructor.normalize = normalize;
   return constructor;
 })();
 

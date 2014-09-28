@@ -1,6 +1,45 @@
 var expect = require('chai').expect,
   Chain = require('../.');
 
+describe('basic math', function () {
+  var chart = {
+    'a': {'a': 0.2, 'b': 0.65, 'c': 0.15},
+    'b': {'a': 0.1, 'b': 0.8, 'c': 0.1},
+    'c': {'a': 0.7, 'b': 0.25, 'c': 0.05}
+  };
+
+  var chain;
+
+  it('isRowNormalized is correct', function () {
+    chain = new Chain(chart);
+    expect(chain.isRowNormalized('a')).to.be.true;
+    expect(chain.isRowNormalized('b')).to.be.true;
+    expect(chain.isRowNormalized('c')).to.be.true;
+  });
+
+  it('getColumnSum is correct', function () {
+    chain = new Chain(chart);
+    expect(chain.getColumnSum('a')).to.equal(1);
+    expect(chain.getColumnSum('b')).to.equal(1.7000000000000002);
+    expect(chain.getColumnSum('c')).to.equal(0.3);
+  });
+
+  it('getColumnAverage is correct', function () {
+    chain = new Chain(chart);
+    expect(chain.getColumnAverage('a')).to.equal(0.3333333333333333);
+    expect(chain.getColumnAverage('b')).to.equal(0.5666666666666668);
+    expect(chain.getColumnAverage('c')).to.equal(0.09999999999999999);
+  });
+
+  it('normalize is correct with small numbers', function () {
+    expect(Chain.getSum(Chain.normalize([1, 2, 3, 4, 5]))).to.equal(1);
+  });
+
+  it('normalize is correct with large numbers', function () {
+    expect(Chain.getSum(Chain.normalize([5000, 2, 111111, 3000, 1121212]))).to.equal(1);
+  });
+});
+
 describe('getProbabilityOf', function (){
 
   var chart = {
@@ -51,6 +90,14 @@ describe('getProbabilityFromTo', function () {
       chart.c.b*chart.b.a +
       chart.c.c*chart.c.a
     );
+  });
+
+  it('example 3', function () {
+    expect(
+        chain.getProbabilityOf('b', 'a')*chain.getProbabilityOf('a', 'a') +
+        chain.getProbabilityOf('b', 'b')*chain.getProbabilityOf('b', 'a') +
+        chain.getProbabilityOf('b', 'c')*chain.getProbabilityOf('c', 'a')
+    ).to.equal(chain.getProbabilityFromTo('b', 'a', 2));
   });
 });
 

@@ -25,9 +25,8 @@ var chart = {
   
   //start to end, number of steps known
   // This is fun, because we're walking through each possibility between start to end, which moves toward an isotope.
-  // The isotope forms because we're adding all the possible paths between start and end assuming we can move between
-  // all of them.  Since we always have 100% probability of reaching all of them between start and end, the larger the
-  // number of steps, the closer we get to the original matrix, and the less the start and end points matter.
+  // The isotope forms because we're adding all the possible paths between start and end, assuming we can move between
+  // all of them in-between.
   
   chain.getProbabilityFromTo('c', 'a', 1); //0.7
   chain.getProbabilityFromTo('c', 'a', 2); //0.19999999999999998  20%
