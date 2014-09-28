@@ -1,6 +1,6 @@
 {
   "name": "chain",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "",
   "main": "index.js",
   "keywords": [
@@ -14,7 +14,7 @@
   },
   "config": {
     "blanket": {
-      "pattern": "adapter.js",
+      "pattern": "index.js",
       "data-cover-never": "node_modules"
     }
   },

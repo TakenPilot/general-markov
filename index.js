@@ -61,7 +61,8 @@ var Chain = (function () {
 
     var i, current,
       args = Array.prototype.slice.apply(list),
-      resultLength = Math.min(args.length, length),
+      //resultLength = Math.min(args.length, length),
+      resultLength = length,
       q = [],
       result = [];
 
@@ -135,6 +136,23 @@ var Chain = (function () {
     return list;
   }
 
+  function equalWithin(a, b, decimalPlaces) {
+    var digits = decimalPlaces * 10;
+    return Math.round(a*digits) === Math.round(b*digits);
+  }
+
+  function chartEqualWithin(a, b, decimalPlaces) {
+    var rowKeys = Object.keys(a);
+    for(var i = 0; i < rowKeys.length; i++) {
+      for(var j = 0; j < rowKeys.length; j++) {
+        if (!equalWithin(a[rowKeys[i]][rowKeys[j]],  b[rowKeys[i]][rowKeys[j]], decimalPlaces)) {
+          return false;
+        }
+      }
+    }
+    return true;
+  }
+
   var constructor = function (chart) {
     this.chart = chart;
   };
@@ -154,6 +172,8 @@ var Chain = (function () {
   constructor.getAverage = getAverage;
   constructor.getSum = getSum;
   constructor.normalize = normalize;
+  constructor.equalWithin = equalWithin;
+  constructor.chartEqualWithin = chartEqualWithin;
   return constructor;
 })();
 

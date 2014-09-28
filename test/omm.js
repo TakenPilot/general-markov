@@ -26,9 +26,15 @@ describe('basic math', function () {
 
   it('getColumnAverage is correct', function () {
     chain = new Chain(chart);
-    expect(chain.getColumnAverage('a')).to.equal(0.3333333333333333);
-    expect(chain.getColumnAverage('b')).to.equal(0.5666666666666668);
-    expect(chain.getColumnAverage('c')).to.equal(0.09999999999999999);
+    expect(
+      chain.getColumnAverage('a') +
+      chain.getColumnAverage('b') +
+      chain.getColumnAverage('c')
+    ).to.be.within(0.99999999, 1.000000001);
+  });
+
+  it('normalize is correct with small numbers', function () {
+    expect(Chain.getAverage([1, 2, 3, 4, 5])).to.equal(3);
   });
 
   it('normalize is correct with small numbers', function () {
@@ -37,6 +43,86 @@ describe('basic math', function () {
 
   it('normalize is correct with large numbers', function () {
     expect(Chain.getSum(Chain.normalize([5000, 2, 111111, 3000, 1121212]))).to.equal(1);
+  });
+});
+
+describe('Wikipedia stock market example', function () {
+  var transition = {
+    'bull market': {'bull market': 0.9, 'bear market': 0.075, 'stagnant market': 0.025},
+    'bear market': {'bull market': 0.15, 'bear market': 0.8, 'stagnant market': 0.05},
+    'stagnant market': {'bull market': 0.25, 'bear market': 0.25, 'stagnant market': 0.5}
+  };
+
+  var threeTimePeriodsLater = {
+    'bull market': {'bull market': 0.7745, 'bear market': 0.17875, 'stagnant market': 0.04675},
+    'bear market': {'bull market': 0.3575, 'bear market': 0.56825, 'stagnant market': 0.07425},
+    'stagnant market': {'bull market': 0.4675, 'bear market': 0.37125, 'stagnant market': 0.16125}
+  };
+
+  it('rows are normalized', function () {
+    var chain = new Chain(transition);
+    expect(chain.isRowNormalized('bull market')).to.be.true;
+    expect(chain.isRowNormalized('bear market')).to.be.true;
+    expect(chain.isRowNormalized('stagnant market')).to.be.true;
+  });
+
+  it('getColumnAverage is correctly averaged and thus sums to 1', function () {
+    var chain = new Chain(transition);
+    expect(
+        chain.getColumnAverage('bull market') +
+        chain.getColumnAverage('bear market') +
+        chain.getColumnAverage('stagnant market')
+    ).to.be.within(0.99999999, 1.000000001);
+  });
+
+  it('Three time periods later matches example results', function () {
+
+    var chain = new Chain(transition),
+      timePeriods = 3;
+
+    var result = {
+      'bull market': {
+        'bull market': chain.getProbabilityFromTo('bull market', 'bull market', timePeriods),
+        'bear market': chain.getProbabilityFromTo('bull market', 'bear market', timePeriods),
+        'stagnant market': chain.getProbabilityFromTo('bull market', 'stagnant market', timePeriods)
+      },
+      'bear market': {
+        'bull market': chain.getProbabilityFromTo('bear market', 'bull market', timePeriods),
+        'bear market': chain.getProbabilityFromTo('bear market', 'bear market', timePeriods),
+        'stagnant market': chain.getProbabilityFromTo('bear market', 'stagnant market', timePeriods)
+      },
+      'stagnant market': {
+        'bull market': chain.getProbabilityFromTo('stagnant market', 'bull market', timePeriods),
+        'bear market': chain.getProbabilityFromTo('stagnant market', 'bear market', timePeriods),
+        'stagnant market': chain.getProbabilityFromTo('stagnant market', 'stagnant market', timePeriods)
+      }
+    };
+    expect(Chain.chartEqualWithin(result, threeTimePeriodsLater, 5)).to.be.true;
+  });
+
+  it('Five time periods later does not match example results', function () {
+
+    var chain = new Chain(transition),
+      timePeriods = 5;
+
+    var result = {
+      'bull market': {
+        'bull market': chain.getProbabilityFromTo('bull market', 'bull market', timePeriods),
+        'bear market': chain.getProbabilityFromTo('bull market', 'bear market', timePeriods),
+        'stagnant market': chain.getProbabilityFromTo('bull market', 'stagnant market', timePeriods)
+      },
+      'bear market': {
+        'bull market': chain.getProbabilityFromTo('bear market', 'bull market', timePeriods),
+        'bear market': chain.getProbabilityFromTo('bear market', 'bear market', timePeriods),
+        'stagnant market': chain.getProbabilityFromTo('bear market', 'stagnant market', timePeriods)
+      },
+      'stagnant market': {
+        'bull market': chain.getProbabilityFromTo('stagnant market', 'bull market', timePeriods),
+        'bear market': chain.getProbabilityFromTo('stagnant market', 'bear market', timePeriods),
+        'stagnant market': chain.getProbabilityFromTo('stagnant market', 'stagnant market', timePeriods)
+      }
+    };
+    expect(Chain.chartEqualWithin(result, threeTimePeriodsLater, 5)).to.be.false;
   });
 });
 
