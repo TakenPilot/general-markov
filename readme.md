@@ -121,8 +121,36 @@ expect(Chain.chartEqualWithin(result, threeTimePeriodsLater, 5)).to.be.true;
   
 ```
 
+##Example of importing data into a chart
+
+```JavaScript
+
+var tokenizer = new Tokenizer({separator: /\W/});  //regex to separate states by whitespace
+
+var chart = tokenizer.readString('beep beep boop'); //give string
+
+console.log(chart);  // outputs {"beep": { "beep": 1, "boop": 1 }}
+
+```
+
+##Another example of importing data into a chart
+
+```JavaScript
+
+var mock = new MockReadable(['beep beep boop']);
+
+var tokenizer = new Tokenizer({separator: /\W/});  //divide by whitespace
+
+tokenizer.readStream(mock, function (err, chart) {
+    //chart is now a count of state changes
+    console.log(chart); // outputs {"beep": { "beep": 1, "boop": 1 }}
+});
+
+```
+
 ##To DO
 
+* Add chart normalization function
 * Add support for Hidden Markov Models
 * Add support for ANOVAs to look for better data to use as columns
 * Add support for more matrix math
