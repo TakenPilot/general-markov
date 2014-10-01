@@ -75,48 +75,75 @@ chain.getProbabilityFromTo('a', 'b', 7); //0.7146687500000002  71.5%
 
 // with a transition matrix like this:
 var transition = {
-  'bull market': 
-    {'bull market': 0.9, 'bear market': 0.075, 'stagnant market': 0.025},
-  'bear market': 
-    {'bull market': 0.15, 'bear market': 0.8, 'stagnant market': 0.05},
-  'stagnant market': 
-    {'bull market': 0.25, 'bear market': 0.25, 'stagnant market': 0.5}
+  'bull market': {
+    'bull market': 0.9, 
+    'bear market': 0.075, 
+    'stagnant market': 0.025
+  },
+  'bear market': {
+    'bull market': 0.15, 
+    'bear market': 0.8, 
+    'stagnant market': 0.05
+  },
+  'stagnant market': {
+    'bull market': 0.25, 
+    'bear market': 0.25, 
+    'stagnant market': 0.5
+  }
 };
 
-// then three time periods later, we should get this:
+// three time periods later, we should get this:
 var threeTimePeriodsLater = {
-  'bull market': 
-    {'bull market': 0.7745, 'bear market': 0.17875, 'stagnant market': 0.04675},
-  'bear market': 
-    {'bull market': 0.3575, 'bear market': 0.56825, 'stagnant market': 0.07425},
-  'stagnant market': 
-    {'bull market': 0.4675, 'bear market': 0.37125, 'stagnant market': 0.16125}
+  'bull market': {
+    'bull market': 0.7745, 
+    'bear market': 0.17875, 
+    'stagnant market': 0.04675
+  },
+  'bear market': {
+    'bull market': 0.3575, 
+    'bear market': 0.56825, 
+    'stagnant market': 0.07425
+  },
+  'stagnant market': {
+    'bull market': 0.4675, 
+    'bear market': 0.37125, 
+    'stagnant market': 0.16125
+  }
 };
 
 var chain = new Chain(transition),
     ticks = 3;
 
-//calculate!
+// calculate!
 var result = {
   'bull market': {
-    'bull market': chain.getProbabilityFromTo('bull market', 'bull market', ticks),
-    'bear market': chain.getProbabilityFromTo('bull market', 'bear market', ticks),
-    'stagnant market': chain.getProbabilityFromTo('bull market', 'stagnant market', ticks)
+    'bull market': 
+      chain.getProbabilityFromTo('bull market', 'bull market', ticks),
+    'bear market': 
+      chain.getProbabilityFromTo('bull market', 'bear market', ticks),
+    'stagnant market': 
+      chain.getProbabilityFromTo('bull market', 'stagnant market', ticks)
   },
   'bear market': {
-    'bull market': chain.getProbabilityFromTo('bear market', 'bull market', ticks),
-    'bear market': chain.getProbabilityFromTo('bear market', 'bear market', ticks),
-    'stagnant market': chain.getProbabilityFromTo('bear market', 'stagnant market', ticks)
+    'bull market': 
+      chain.getProbabilityFromTo('bear market', 'bull market', ticks),
+    'bear market': 
+      chain.getProbabilityFromTo('bear market', 'bear market', ticks),
+    'stagnant market': 
+      chain.getProbabilityFromTo('bear market', 'stagnant market', ticks)
   },
   'stagnant market': {
-    'bull market': chain.getProbabilityFromTo('stagnant market', 'bull market', ticks),
-    'bear market': chain.getProbabilityFromTo('stagnant market', 'bear market', ticks),
-    'stagnant market': chain.getProbabilityFromTo('stagnant market', 'stagnant market', ticks)
+    'bull market': 
+      chain.getProbabilityFromTo('stagnant market', 'bull market', ticks),
+    'bear market': 
+      chain.getProbabilityFromTo('stagnant market', 'bear market', ticks),
+    'stagnant market': 
+      chain.getProbabilityFromTo('stagnant market', 'stagnant market', ticks)
   }
 };
 
-//the expected result and our result are equal
-// their expected result is rounded to 5 decimal places, so we have to round as well
+// the expected result and our result are equal
+// expected result is rounded to 5 decimal places, so we have to round as well
 expect(Chain.chartEqualWithin(result, threeTimePeriodsLater, 5)).to.be.true; 
   
 ```
@@ -125,8 +152,7 @@ expect(Chain.chartEqualWithin(result, threeTimePeriodsLater, 5)).to.be.true;
 
 ```JavaScript
 
-var tokenizer = new Tokenizer({separator: /\W/});  //regex to separate states by whitespace
-
+var tokenizer = new Tokenizer({separator: /\W/});  
 var chart = tokenizer.readString('beep beep boop'); //give string
 
 console.log(chart);  // outputs {"beep": { "beep": 1, "boop": 1 }}
@@ -138,11 +164,8 @@ console.log(chart);  // outputs {"beep": { "beep": 1, "boop": 1 }}
 ```JavaScript
 
 var mock = new MockReadable(['beep beep boop']);
-
 var tokenizer = new Tokenizer({separator: /\W/});  //divide by whitespace
-
 tokenizer.readStream(mock, function (err, chart) {
-    //chart is now a count of state changes
     console.log(chart); // outputs {"beep": { "beep": 1, "boop": 1 }}
 });
 
