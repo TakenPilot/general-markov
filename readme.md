@@ -152,12 +152,12 @@ expect(Chain.chartEqualWithin(result, threeTimePeriodsLater, 5)).to.be.true;
 #markov.Tokenizer
 
 Creating transition charts by hand is annoying, so here is a useful tool to do it for you.  Give the tokenizer your
-separator as regex and a string (or a stream), and it will counts each state transition between tokens and put it into a
-chart.  This is useful for importing files, database results, or network requests, and it is optimized for loading large 
-data-sets, as long as you can hold the resulting chart in memory.
+separator as regex and a string (or a stream), and it will count each state transition between tokens and put the
+totals into a chart.  This is useful for importing files, database results, or network requests, and it is optimized
+for loading large data-sets, as long as you can hold the resulting chart in memory.
 
-It does not normalize the transition chart. Data often comes from multiple sources, so we need to wait until we're done
-gathering information.  When all state transitions have been counted, then you can normalize the data.
+It does not normalize the transition chart. Data often comes from multiple sources, so we need to wait until 
+we're done gathering information.  When all state transitions have been counted, then you can normalize the data.
 
 ##Example of importing data into a chart
 
