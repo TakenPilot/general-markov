@@ -24,7 +24,11 @@ Warning:  I haven't got the speed requirements up to where they should be yet.  
 time steps up to 10.  If you're doing more than that, you should probably be trying to calculate the limit/isotope of a
 particular outcome instead.  I talk more about that in the examples below.
 
-##Example
+#markov.Chain
+
+Create an instance of a Chain with a transition chart to calculate the probabilities of states.
+
+##Example 1
 
 ```JavaScript
 
@@ -35,20 +39,17 @@ var chart = {
 };
 
 chain = new Chain(chart);
-
-//distinct path
-
 chain.getProbabilityOf('a', 'b');  //0.65  65%
 chain.getProbabilityOf('a', 'b', 'a'); //0.065  6.5%
 chain.getProbabilityOf('a', 'b', 'c', 'a'); //0.0455  4.55%
 
 ```
 
-##From start to end in exact number of steps
+##Example 2
 
-This is fun, because we're walking through each possibility between start to end, which moves 
+In this example, we're walking through each possibility between start to end, which moves 
 toward an isotope. The isotope forms because we're adding all the possible paths between start 
-and end, assuming we can move between all of them in-between.
+and end.  Since we can move between all of them, the start and end points matter less as we add more steps.
 
 ```JavaScript
 
@@ -147,6 +148,16 @@ var result = {
 expect(Chain.chartEqualWithin(result, threeTimePeriodsLater, 5)).to.be.true; 
   
 ```
+
+#markov.Tokenizer
+
+Creating transition charts by hand is annoying, so here is a useful tool to do it for you.  Give the tokenizer your
+separator as regex and a string (or a stream), and it will counts each state transition between tokens and put it into a
+chart.  This is useful for importing files, database results, or network requests, and it is optimized for loading large 
+data-sets, as long as you can hold the resulting chart in memory.
+
+It does not normalize the transition chart. Data often comes from multiple sources, so we need to wait until we're done
+gathering information.  When all state transitions have been counted, then you can normalize the data.
 
 ##Example of importing data into a chart
 
