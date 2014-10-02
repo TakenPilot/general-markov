@@ -192,7 +192,7 @@ var stream = new MockReadable(['beep beep boop']);
 var tokenizer = new markov.Tokenizer(Tokenizer.Defaults.Words);
 tokenizer.readStream(stream, function (err, result) {
   var chain = new markov.Chain(result).normalize();
-  console.log(chain.transitions); //outputs {"beep": { "beep": 0.5, "boop": 0.5 }}
+  console.log(chain.transitions); // {"beep": { "beep": 0.5, "boop": 0.5 }}
 });
 
 ```
