@@ -1,6 +1,6 @@
 {
   "name": "general-markov",
-  "version": "0.4.2",
+  "version": "0.5.0",
   "description": "Helper library to perform operations on Observable Markov Models (OMMs).  Markov chains are surprisingly practical.",
   "main": "index.js",
   "repository": "https://github.com/TakenPilot/general-markov",

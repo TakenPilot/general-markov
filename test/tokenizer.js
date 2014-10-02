@@ -77,5 +77,16 @@ describe('Tokenizer', function () {
       done();
     });
   });
+
+  it('can read from a stream and normalize', function (done) {
+    var Chain = require('../.').Chain;
+    var stream = new MockReadable(['beep beep boop']);
+    var tokenizer = new Tokenizer(Tokenizer.Defaults.Words);
+    tokenizer.readStream(stream, function (err, result) {
+      var chain = new Chain(result).normalize();
+      expect(chain.transitions).to.deep.equal({"beep": { "beep": 0.5, "boop": 0.5 }});
+      done();
+    });
+  });
 });
 

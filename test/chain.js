@@ -6,7 +6,7 @@ describe('Chain', function () {
 
 
   describe('basic math', function () {
-    var chart = {
+    var transitions = {
       'a': {'a': 0.2, 'b': 0.65, 'c': 0.15},
       'b': {'a': 0.1, 'b': 0.8, 'c': 0.1},
       'c': {'a': 0.7, 'b': 0.25, 'c': 0.05}
@@ -14,22 +14,45 @@ describe('Chain', function () {
 
     var chain;
 
-    it('isRowNormalized is correct', function () {
-      chain = new Chain(chart);
+    beforeEach(function () {
+      chain = new Chain(transitions);
+    });
+
+    it('isRowNormalized is correct (a)', function () {
       expect(chain.isRowNormalized('a')).to.be.true;
+    });
+
+    it('isRowNormalized is correct (b)', function () {
       expect(chain.isRowNormalized('b')).to.be.true;
+    });
+
+    it('isRowNormalized is correct (c)', function () {
       expect(chain.isRowNormalized('c')).to.be.true;
     });
 
+    it('normalize is correct', function () {
+      var notNormalized = {
+        'a': {'a': 1.2, 'b': 1.65, 'c': 1.15},
+        'b': {'a': 1.1, 'b': 1.8, 'c': 1.1},
+        'c': {'a': 1.7, 'b': 1.25, 'c': 1.05}
+      };
+      var normalized = {
+        "a": { "a": 0.3, "b": 0.4125, "c": 0.2875 },
+        "b": { "a": 0.275, "b": 0.45, "c": 0.275 },
+        "c": { "a": 0.425, "b": 0.3125, "c": 0.2625 }
+      };
+      chain = new Chain(notNormalized);
+      chain.normalize();
+      expect(Chain.equalWithin(chain.transitions, normalized, 5)).to.be.true;
+    });
+
     it('getColumnSum is correct', function () {
-      chain = new Chain(chart);
       expect(chain.getColumnSum('a')).to.equal(1);
       expect(chain.getColumnSum('b')).to.equal(1.7000000000000002);
       expect(chain.getColumnSum('c')).to.equal(0.3);
     });
 
     it('getColumnAverage is correct', function () {
-      chain = new Chain(chart);
       expect(
           chain.getColumnAverage('a') +
           chain.getColumnAverage('b') +
@@ -89,7 +112,7 @@ describe('Chain', function () {
           'stagnant market': chain.getProbabilityFromTo('stagnant market', 'stagnant market', timePeriods)
         }
       };
-      expect(Chain.chartEqualWithin(result, threeTimePeriodsLater, 5)).to.be.true;
+      expect(Chain.equalWithin(result, threeTimePeriodsLater, 5)).to.be.true;
     });
 
     it('Five time periods later does not match example results', function () {
@@ -114,13 +137,13 @@ describe('Chain', function () {
           'stagnant market': chain.getProbabilityFromTo('stagnant market', 'stagnant market', timePeriods)
         }
       };
-      expect(Chain.chartEqualWithin(result, threeTimePeriodsLater, 5)).to.be.false;
+      expect(Chain.equalWithin(result, threeTimePeriodsLater, 5)).to.be.false;
     });
   });
 
   describe('getProbabilityOf', function (){
 
-    var chart = {
+    var transitions = {
       'a': {'a': 0.2, 'b': 0.65, 'c': 0.15},
       'b': {'a': 0.1, 'b': 0.8, 'c': 0.1},
       'c': {'a': 0.7, 'b': 0.25, 'c': 0.05}
@@ -129,7 +152,7 @@ describe('Chain', function () {
     var chain;
 
     beforeEach(function () {
-      chain = new Chain(chart);
+      chain = new Chain(transitions);
     });
 
     it('fails correctly', function () {
@@ -137,36 +160,36 @@ describe('Chain', function () {
     });
 
     it('example 1', function () {
-      expect(chain.getProbabilityOf('a', 'b', 'c')).to.equal(chart.a.b * chart.b.c);
+      expect(chain.getProbabilityOf('a', 'b', 'c')).to.equal(transitions.a.b * transitions.b.c);
     });
 
     it('example 2', function () {
-      expect(chain.getProbabilityOf('c', 'a', 'b')).to.equal(chart.c.a * chart.a.b);
+      expect(chain.getProbabilityOf('c', 'a', 'b')).to.equal(transitions.c.a * transitions.a.b);
     });
   });
 
   describe('getProbabilityFromTo', function () {
-    var chart = {
+    var transitions = {
       'a': {'a': 0.2, 'b': 0.65, 'c': 0.15},
       'b': {'a': 0.1, 'b': 0.8, 'c': 0.1},
       'c': {'a': 0.7, 'b': 0.25, 'c': 0.05}
     };
 
     beforeEach(function () {
-      chain = new Chain(chart);
+      chain = new Chain(transitions);
     });
 
     var chain;
 
     it('example 1', function () {
-      expect(chain.getProbabilityFromTo('c', 'a', 1)).to.equal(chart.c.a);
+      expect(chain.getProbabilityFromTo('c', 'a', 1)).to.equal(transitions.c.a);
     });
 
     it('example 2', function () {
       expect(chain.getProbabilityFromTo('c', 'a', 2)).to.equal(
-          chart.c.a*chart.a.a +
-          chart.c.b*chart.b.a +
-          chart.c.c*chart.c.a
+          transitions.c.a*transitions.a.a +
+          transitions.c.b*transitions.b.a +
+          transitions.c.c*transitions.c.a
       );
     });
 

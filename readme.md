@@ -177,14 +177,28 @@ console.log(chart);  // outputs {"beep": { "beep": 1, "boop": 1 }}
 var mock = new MockReadable(['beep beep boop']);
 var tokenizer = new Tokenizer({separator: /\W/});  //divide by whitespace
 tokenizer.readStream(mock, function (err, chart) {
-    console.log(chart); // outputs {"beep": { "beep": 1, "boop": 1 }}
+  console.log(chart); // outputs {"beep": { "beep": 1, "boop": 1 }}
+});
+
+```
+
+##Normalization
+
+```JavaScript
+
+var markov = require('general-markov');
+
+var stream = new MockReadable(['beep beep boop']);
+var tokenizer = new markov.Tokenizer(Tokenizer.Defaults.Words);
+tokenizer.readStream(stream, function (err, result) {
+  var chain = new markov.Chain(result).normalize();
+  console.log(chain.transitions); //outputs {"beep": { "beep": 0.5, "boop": 0.5 }}
 });
 
 ```
 
 ##To DO
 
-* Add chart normalization function
 * Add support for Hidden Markov Models
 * Add support for ANOVAs to look for better data to use as columns
 * Add support for more matrix math
